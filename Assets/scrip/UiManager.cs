@@ -30,7 +30,7 @@ public class UiManager : MonoBehaviour
         }
 
     }
-        public void Score(int Points)
+    public void Score(int Points)
     {
         _scoreText.text = "Score: " + Points;
     }
@@ -42,10 +42,10 @@ public class UiManager : MonoBehaviour
         {
 
             StartCoroutine(GameOver());
-
+     
         }
     }
-     IEnumerator GameOver()
+    IEnumerator GameOver()
     {
         while (true)
         {
@@ -57,6 +57,6 @@ public class UiManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
     }
- }
+}
 
 

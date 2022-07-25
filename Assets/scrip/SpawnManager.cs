@@ -11,7 +11,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] powerUps;
     private bool _GameOver = false;
-    // Start is called before the first frame update
 
 
     public void StartSpawning()
@@ -19,13 +18,6 @@ public class SpawnManager : MonoBehaviour
 
         StartCoroutine(ReSpawn());
         StartCoroutine(Powerup());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
     }
 
 
@@ -45,7 +37,6 @@ public class SpawnManager : MonoBehaviour
     {
         while (_GameOver == false)
         {
-            yield return new WaitForSeconds(2.0f);
 
             Vector3 spawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
             int RandomPowerup = Random.Range(0, 4);
@@ -55,9 +46,10 @@ public class SpawnManager : MonoBehaviour
         }
     }
     public void Whenpalyerdies()
-    {
+    { 
         _GameOver = true;
         StopAllCoroutines();
+       
     }
 }
 

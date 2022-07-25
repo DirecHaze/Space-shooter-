@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FakeEnemyLaser : MonoBehaviour
-{ 
- private int _speed = 8;
+{
+    private int _speed = 8;
 
-private Player _player;
+    private Player _player;
 
 
 
@@ -15,7 +15,7 @@ private Player _player;
         _player = GameObject.Find("Player").GetComponent<Player>();
         NullCheck();
     }
-    
+
     private void NullCheck()
     {
         if (_player == null)
@@ -23,30 +23,29 @@ private Player _player;
             Debug.LogError("The Player is null");
         }
     }
-        // Update is called once per frame
-        void Update()
-{
-    Velocity();
-
-
-
-    if (transform.position.y <= -8)
+    void Update()
     {
-
-        if (transform.parent != null)
-        {
-            Destroy(transform.parent.gameObject);
-
-        }
-        Destroy(gameObject);
+        Velocity();
+        Boundaries();
     }
-}
-void Velocity()
-{
-    transform.Translate(Vector3.down * _speed * Time.deltaTime);
+    void Boundaries()
+    {
+        if (transform.position.y <= -8)
+        {
 
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
 
-}
+            }
+            Destroy(gameObject);
+        }
+    }
+    void Velocity()
+    {
+        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")

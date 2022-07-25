@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyLaser : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     private int _speed = 8;
 
     private Player _player;
@@ -19,7 +19,7 @@ public class EnemyLaser : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         NullCheck();
     }
-    private void NullCheck()
+    void NullCheck()
     {
         if (_player == null)
         {
@@ -30,13 +30,14 @@ public class EnemyLaser : MonoBehaviour
             Debug.LogError("The AudioSource is null");
         }
     }
-        // Update is called once per frame
-        void Update()
+    void Update()
     {
         Velocity();
+        Boundaries();
+    }
 
-       
-
+    private void Boundaries()
+    {
         if (transform.position.y <= -8)
         {
 
@@ -51,8 +52,6 @@ public class EnemyLaser : MonoBehaviour
     void Velocity()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        
-
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -67,5 +66,5 @@ public class EnemyLaser : MonoBehaviour
             Destroy(this.gameObject);
 
         }
-    } 
+    }
 } 

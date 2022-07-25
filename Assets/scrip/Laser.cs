@@ -8,12 +8,13 @@ public class Laser : MonoBehaviour
 
 
 
-    // Update is called once per frame
     void Update()
     {
         Velocity();
-
-
+        Boundaries();
+    }
+    void Boundaries()
+    {
         if (transform.position.y >= 8)
         {
 
@@ -26,9 +27,7 @@ public class Laser : MonoBehaviour
         }
     }
     void Velocity()
-    { 
-        transform.Translate(Vector3.up * _speed * Time.deltaTime); 
-    
-    
+    {
+        transform.Translate(Vector3.up * _speed * Time.deltaTime);
     }
 }

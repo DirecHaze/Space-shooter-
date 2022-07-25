@@ -14,24 +14,23 @@ public class Enemy : MonoBehaviour
     private float _fireOn = -1f;
 
     private Player _player;
-
     private Animator _animation;
-
     private AudioSource _audioSource;
-   public AudioClip _laserAudioSource;
+    private GameManager _gameManager;
+
+    public AudioClip _laserAudioSource;
 
     private bool _isenemyAlive = true;
-  
-
-
+    private bool _SelfDestroy = true;
     void Start()
     {
 
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animation = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         NullCheck();
-
+        SelfDestroy();
     }
     private void NullCheck()
     {
@@ -47,9 +46,18 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The AudioSource is null");
         }
+        if (_gameManager == null)
+        {
+            Debug.LogError("The GameManager is null");
+        }
 
     }
-    // Update is called once per frame
+    private void SelfDestroy()
+    {
+        Destroy(this.gameObject, 37.4f);
+        _SelfDestroy = true;
+    }
+
     void Update()
     {
 
@@ -65,7 +73,7 @@ public class Enemy : MonoBehaviour
             _fireRate = Random.Range(3f, 7f);
             _fireOn = Time.time + _fireRate;
             Instantiate(_EnemylaserPrefab, transform.position, Quaternion.identity);
-        if(_isenemyAlive == true)
+            if (_isenemyAlive == true)
             {
                 _audioSource.PlayOneShot(_laserAudioSource);
             }
@@ -104,6 +112,7 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
             _isenemyAlive = false;
+            _SelfDestroy = false;
             Destroy(this.gameObject, 2.9f);
 
         }
@@ -120,12 +129,15 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
             _isenemyAlive = false;
+            _SelfDestroy = false;
             Destroy(this.gameObject, 2.9f);
-
         }
     }
+    public void EndOfEnemy()
+    {
+        Destroy(this.gameObject);
+    }
 }
-
 
 
 

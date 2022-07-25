@@ -15,7 +15,6 @@ public class Asteroid : MonoBehaviour
 
     [SerializeField]
     private AudioSource _explosionAudioSource;
-    // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -32,31 +31,28 @@ public class Asteroid : MonoBehaviour
         {
             Debug.LogError("The SpawnManager is null");
         }
-        Debug.Log("its checking");
     }
-        private void Update()
+    private void Update()
     {
         roation();
     }
     void roation()
     {
-
         transform.Rotate(Vector3.forward * _rotationSpeed * Time.deltaTime);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-            if (other.tag == "laser")
-              {
+        if (other.tag == "laser")
+        {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-                if (_player != null)
-                {
-                    _player.PlusScore(5);
-                }
+            if (_player != null)
+            {
+                _player.PlusScore(5);
+            }
             _explosionAudioSource.Play();
             Destroy(other.gameObject);
             _spawnManager.StartSpawning();
             Destroy(this.gameObject, 0.20f);
-            }
         }
     }
-
+}

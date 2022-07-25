@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -16,7 +15,7 @@ public class Player : MonoBehaviour
     private GameObject _shieldUpPrefab;
     [SerializeField]
     private GameObject _theBlastPrefab;
-   
+
 
     [SerializeField]
     private GameObject _shieldVisualizer;
@@ -38,12 +37,13 @@ public class Player : MonoBehaviour
     private UiManager _uiManager;
     private Enemy _enemy;
 
+    private bool _IsTripleShotActive = false;
+    private bool _IsSpeedBootsActive = false;
+    private bool _IsShieldActive = false;
+    private bool _IsTheBlastActive = false;
+    private bool _PlayerIsDead = false;
 
-    private bool _isTripleShotActive = false;
-    private bool _isSpeedBootsActive = false;
-    private bool _isShieldActive = false;
-    private bool _isTheBlastActive = false;
-    
+
 
     [SerializeField]
     private GameObject _explosionPrefab;
@@ -57,11 +57,11 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        
+
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
         transform.position = new Vector3(0, -2, 0);
-
+        NullCheck();
     }
     private void NullCheck()
     {
@@ -76,15 +76,14 @@ public class Player : MonoBehaviour
         }
     }
 
-
-        void Update()
+    void Update()
     {
-        movement();
-        bounder();
-
+        Movement();
+        Boundaries();
+        PlayerIsDead();
     }
 
-    void movement()
+    void Movement()
     {
         float horizontalinput = Input.GetAxis("Horizontal");
         float verticalinput = Input.GetAxis("Vertical");
@@ -92,14 +91,13 @@ public class Player : MonoBehaviour
         transform.Translate(Vector3.right * horizontalinput * _speed * Time.deltaTime);
         transform.Translate(Vector3.up * verticalinput * _speed * Time.deltaTime);
 
-
     }
-    void bounder()
+    void Boundaries()
     {
         if (transform.position.y >= 0)
 
-            transform.position = new Vector3(transform.position.x, 0, 0);
-
+        transform.position = new Vector3(transform.position.x, 0, 0);
+    
         else if (transform.position.y <= -3.8f)
         {
             transform.position = new Vector3(transform.position.x, -3.8f, 0);
@@ -112,18 +110,16 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(16.5f, transform.position.y, 0);
         }
-
-
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _fireOn)
-            Shot_input();
+                Shot_input();
     }
 
     private void Shot_input()
 
     {
         _fireOn = Time.time + _fireRate;
-        
-        if (_isTripleShotActive == true)
+
+        if (_IsTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
         }
@@ -132,10 +128,10 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.9f, 0), Quaternion.identity);
         }
 
-        if (_isTheBlastActive == true)
+        if (_IsTheBlastActive == true)
         {
             Instantiate(_theBlastPrefab, transform.position, Quaternion.identity);
-            _isTheBlastActive = false;
+            _IsTheBlastActive = false;
             _laserAudioSource.Play();
             return;
         }
@@ -146,9 +142,9 @@ public class Player : MonoBehaviour
     }
     public void Damage()
     {
-        if (_isShieldActive == true)
+        if (_IsShieldActive == true)
         {
-            _isShieldActive = false;
+            _IsShieldActive = false;
             _shieldVisualizer.SetActive(false);
             return;
         }
@@ -165,30 +161,37 @@ public class Player : MonoBehaviour
         {
             _leftThruster.SetActive(true);
         }
-         if (_lives < 1)
+        if (_lives < 1)
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             _explosionAudioSource.Play();
             _spawnManager.Whenpalyerdies();
-            Destroy(this.gameObject);
-          
+            _PlayerIsDead = true;
+
         }
 
     }
+    private void PlayerIsDead()
+    {
+        if (_PlayerIsDead == true)
+        {
+            Destroy(this.gameObject);
+        }
+    }
     public void TripleShotOn()
     {
-        _isTripleShotActive = true;
+        _IsTripleShotActive = true;
         _powerUpCollect.Play();
         StartCoroutine(TripleShotOff());
     }
     IEnumerator TripleShotOff()
     {
         yield return new WaitForSeconds(6.0f);
-        _isTripleShotActive = false;
+        _IsTripleShotActive = false;
     }
     public void SpeedUpOn()
     {
-        _isSpeedBootsActive = true;
+        _IsSpeedBootsActive = true;
         _powerUpCollect.Play();
         _speed = 5.5f;
         StartCoroutine(SpeedUpoff());
@@ -197,28 +200,28 @@ public class Player : MonoBehaviour
     IEnumerator SpeedUpoff()
     {
         yield return new WaitForSeconds(7.0f);
-        _isSpeedBootsActive = false;
+        _IsSpeedBootsActive = false;
         _speed = 3.5f;
     }
     public void ShieldOn()
     {
-        _isShieldActive = true;
+        _IsShieldActive = true;
         _powerUpCollect.Play();
         _shieldVisualizer.SetActive(true);
     }
     public void TheBlastOn()
     {
-        _isTheBlastActive = true;
-       
+        _IsTheBlastActive = true;
+
         _powerUpCollect.Play();
     }
-   
+
     public void PlusScore(int points)
     {
 
         _score += points;
         _uiManager.Score(_score);
-       
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
