@@ -6,19 +6,19 @@ public class FakeEnemyLaser : MonoBehaviour
 {
     private int _speed = 8;
 
-    private Player _player;
+    private Player _Player;
 
 
 
     void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();
+        _Player = GameObject.Find("Player").GetComponent<Player>();
         NullCheck();
     }
 
     private void NullCheck()
     {
-        if (_player == null)
+        if (_Player == null)
         {
             Debug.LogError("The Player is null");
         }
@@ -50,7 +50,7 @@ public class FakeEnemyLaser : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (_player != null)
+            if (_Player != null)
             {
                 Destroy(this.gameObject);
 

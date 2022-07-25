@@ -7,7 +7,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int _speed = 3;
     [SerializeField]
-    private int _powerupID;
+    private int _powerUpID;
 
   
     void Update()
@@ -23,7 +23,7 @@ public class PowerUp : MonoBehaviour
         if (other.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
-            switch (_powerupID)
+            switch (_powerUpID)
             {
                 case 0:
                     player.TripleShotOn();

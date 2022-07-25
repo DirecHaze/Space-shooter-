@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
     {
 
         Move();
-        randomSpawn();
+        RandomSpawn();
         enemyshoot();
     }
     void enemyshoot()
@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
     }
-    void randomSpawn()
+    void RandomSpawn()
     {
         if (transform.position.y <= -5.6f)
 

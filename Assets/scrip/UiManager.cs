@@ -14,17 +14,17 @@ public class UiManager : MonoBehaviour
     [SerializeField]
     private Sprite[] _livesDisplay;
 
-    private GameManager _gameManager;
+    private GameManager _GameManager;
 
     void Start()
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _scoreText.text = "Score: " + 0;
         NullCheck();
     }
     private void NullCheck()
     {
-        if (_gameManager == null)
+        if (_GameManager == null)
         {
             Debug.LogError("The GameManager is null");
         }
@@ -49,7 +49,7 @@ public class UiManager : MonoBehaviour
     {
         while (true)
         {
-            _gameManager.GAMEOver();
+            _GameManager.GAMEOver();
             transform.GetChild(3).gameObject.SetActive(true);
             transform.GetChild(2).gameObject.SetActive(true);
             yield return new WaitForSeconds(0.3f);

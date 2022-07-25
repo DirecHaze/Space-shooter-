@@ -7,25 +7,23 @@ public class EnemyLaser : MonoBehaviour
 
     private int _speed = 8;
 
-    private Player _player;
-   
+    private Player _Player;
 
-
-    private AudioSource _audioSource;
+    private AudioSource _AudioSource;
 
     void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();
-        _audioSource = GetComponent<AudioSource>();
+        _Player = GameObject.Find("Player").GetComponent<Player>();
+        _AudioSource = GetComponent<AudioSource>();
         NullCheck();
     }
     void NullCheck()
     {
-        if (_player == null)
+        if (_Player == null)
         {
             Debug.LogError("The Player is null");
         }
-        if (_audioSource == null)
+        if (_AudioSource == null)
         {
             Debug.LogError("The AudioSource is null");
         }
@@ -57,12 +55,12 @@ public class EnemyLaser : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (_player != null)
+            if (_Player != null)
             {
-                _player.Damage();
+                _Player.Damage();
 
             }
-            _audioSource.Play();
+            _AudioSource.Play();
             Destroy(this.gameObject);
 
         }

@@ -27,15 +27,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score;
 
-    private float _fireRate = 0.20f;
-    private float _fireOn = -1f;
+    private float _FireRate = 0.20f;
+    private float _FireOn = -1f;
 
     [SerializeField]
     private int _lives = 3;
 
-    private SpawnManager _spawnManager;
-    private UiManager _uiManager;
-    private Enemy _enemy;
+    private SpawnManager _SpawnManager;
+    private UiManager _UiManager;
 
     private bool _IsTripleShotActive = false;
     private bool _IsSpeedBootsActive = false;
@@ -58,19 +57,19 @@ public class Player : MonoBehaviour
     void Start()
     {
 
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
-        _uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
+        _SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _UiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
         transform.position = new Vector3(0, -2, 0);
         NullCheck();
     }
     private void NullCheck()
     {
-        if (_spawnManager == null)
+        if (_SpawnManager == null)
         {
             Debug.LogError("The SpawnManager is null");
         }
 
-        if (_uiManager == null)
+        if (_UiManager == null)
         {
             Debug.LogError("The UiManager is null");
         }
@@ -110,14 +109,14 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(16.5f, transform.position.y, 0);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _fireOn)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _FireOn)
                 Shot_input();
     }
 
     private void Shot_input()
 
     {
-        _fireOn = Time.time + _fireRate;
+        _FireOn = Time.time + _FireRate;
 
         if (_IsTripleShotActive == true)
         {
@@ -151,7 +150,7 @@ public class Player : MonoBehaviour
 
         _lives--;
 
-        _uiManager.LivesPlayerHas(_lives);
+        _UiManager.LivesPlayerHas(_lives);
 
         if (_lives < 3)
         {
@@ -165,7 +164,7 @@ public class Player : MonoBehaviour
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             _explosionAudioSource.Play();
-            _spawnManager.Whenpalyerdies();
+            _SpawnManager.Whenpalyerdies();
             _PlayerIsDead = true;
 
         }
@@ -220,7 +219,7 @@ public class Player : MonoBehaviour
     {
 
         _score += points;
-        _uiManager.Score(_score);
+        _UiManager.Score(_score);
 
     }
     private void OnTriggerEnter2D(Collider2D other)
