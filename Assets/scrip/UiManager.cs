@@ -30,12 +30,13 @@ public class UiManager : MonoBehaviour
     private SpawnManager _spawnManager;
 
 
+
     void Start()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _scoreText.text = "Score: " + 0;
-        _numberOfAmmo.text = "15 / " + 15.ToString();
+        _numberOfAmmo.text = "15 / 15 ";
         NullCheck();
         transform.GetChild(8).gameObject.SetActive(false);
     }
@@ -53,8 +54,10 @@ public class UiManager : MonoBehaviour
     }
     public void UpdateAmmoCount(int Ammo)
     {
-        _numberOfAmmo.text = "15 / " +  Ammo.ToString();
+        _numberOfAmmo.text = Ammo.ToString() + " / 15 ";
+        
     }
+  
     public void PressXCalled()
     {
         _pressX.text = "Press X: For Missile";
