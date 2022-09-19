@@ -10,24 +10,24 @@ public class Asteroid : MonoBehaviour
     [SerializeField]
     private GameObject _explosionPrefab;
 
-    private Player _Player;
-    private SpawnManager _SpawnManager;
+    private Player _player;
+    private SpawnManager _spawnManager;
 
     [SerializeField]
     private AudioSource _explosionAudioSource;
     void Start()
     {
-        _Player = GameObject.Find("Player").GetComponent<Player>();
-        _SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         NullCheck();
     }
     private void NullCheck()
     {
-        if (_Player == null)
+        if (_player == null)
         {
             Debug.LogError("The Player is null");
         }
-        if (_SpawnManager == null)
+        if (_spawnManager == null)
         {
             Debug.LogError("The SpawnManager is null");
         }
@@ -45,13 +45,14 @@ public class Asteroid : MonoBehaviour
         if (other.tag == "laser")
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            if (_Player != null)
+            if (_player != null)
             {
-                _Player.PlusScore(5);
+                _player.PlusScore(5);
             }
             _explosionAudioSource.Play();
             Destroy(other.gameObject);
-            _SpawnManager.StartSpawning();
+            _spawnManager.StartEnemySpawning();
+            _spawnManager.StartSpawningPowerUps();
             Destroy(this.gameObject, 0.20f);
         }
     }

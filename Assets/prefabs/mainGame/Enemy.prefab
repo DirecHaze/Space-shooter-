@@ -49,9 +49,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b0356ac6f872242b5a654003bfdba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
+  _speed: 2
   _EnemylaserPrefab: {fileID: 4702633552212418113, guid: 9359d07ab7e3c344782e9723ad97d198, type: 3}
+  _EnemySheildVisualizer: {fileID: 0}
   _laserAudioSource: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _diffEnemyMovement: 0
+  _diffEnemyShooting: 0
+  _diffEnemySheild: 1
 --- !u!61 &5993082932666471960
 BoxCollider2D:
   m_ObjectHideFlags: 0

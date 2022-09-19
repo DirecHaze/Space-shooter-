@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private int _speed = 3;
+    private float _speed = 2.5f;
 
     [SerializeField]
     private GameObject _EnemylaserPrefab;
@@ -20,11 +20,19 @@ public class Enemy : MonoBehaviour
 
     public AudioClip _laserAudioSource;
 
-    private bool _isenemyAlive = true;
+    private bool _IsenemyAlive = true;
     private bool _SelfDestroy = true;
+
+    private int _randomMove;
+    [SerializeField]
+    private int _diffEnemyMovement;
+    [SerializeField]
+    private int _diffEnemyShooting;
     void Start()
     {
 
+        StartCoroutine(RandomMove());
+        StartCoroutine(ZigZag());
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animation = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
@@ -63,29 +71,32 @@ public class Enemy : MonoBehaviour
 
         Move();
         RandomSpawn();
-        enemyshoot();
+        DiffEnemyMovement();
+        DiffEnemyShooting();
+       
     }
-    void enemyshoot()
+    private void enemyshoot()
     {
 
-        if (Time.time > _fireOn && _isenemyAlive == true)
+        if (Time.time > _fireOn && _IsenemyAlive == true)
         {
             _fireRate = Random.Range(3f, 7f);
             _fireOn = Time.time + _fireRate;
             Instantiate(_EnemylaserPrefab, transform.position, Quaternion.identity);
-            if (_isenemyAlive == true)
-            {
-                _audioSource.PlayOneShot(_laserAudioSource);
-            }
+            _audioSource.PlayOneShot(_laserAudioSource);
+
         }
     }
 
-    void Move()
+    private void Move()
     {
+
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
+
+
     }
-    void RandomSpawn()
+    private void RandomSpawn()
     {
         if (transform.position.y <= -5.6f)
 
@@ -97,9 +108,80 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void NewMovement()
+    {
+        switch (_randomMove)
+        {
+            case 0:
+                transform.Translate(Vector3.down * _speed * Time.deltaTime);
+                break;
+            case 1:
+                transform.Translate(Vector3.right * _speed * Time.deltaTime);
+                break;
+            case 2:
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+                break;
+        }
+    }
+
+    IEnumerator RandomMove()
+    {
+        yield return new WaitForSeconds(1);
+        while (_IsenemyAlive == true)
+        {
+            _randomMove = Random.Range(0, 3);
+            yield return new WaitForSeconds(4);
+        }
+    }
+
+    private void ZigZagMovement()
+    {
+        switch (_randomMove)
+        {
+            case 0:
+                transform.Translate(Vector3.right * _speed * Time.deltaTime);
+                break;
+            case 1:
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+                break;
+        }
+    }
+
+    IEnumerator ZigZag()
+    {
+
+        while (_IsenemyAlive == true)
+        {
+            _randomMove = Random.Range(0, 2);
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+    
+    private void DiffEnemyMovement()
+    {
+        switch (_diffEnemyMovement)
+        {
+            case 0:
+                NewMovement();
+                break;
+            case 1:
+                ZigZagMovement();
+                break;
+        }
+    }
+
+    private void DiffEnemyShooting()
+    {
+        switch (_diffEnemyShooting)
+        {
+            case 0: enemyshoot(); 
+                break;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+
         if (other.tag == "Player")
         {
             if (_player != null)
@@ -107,14 +189,14 @@ public class Enemy : MonoBehaviour
                 _player.Damage();
 
             }
+            _player.ShelidDamageForEnemy();
             _animation.SetTrigger("WhenEnemyDies");
             _speed = 0;
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
-            _isenemyAlive = false;
+            _IsenemyAlive = false;
             _SelfDestroy = false;
             Destroy(this.gameObject, 2.9f);
-
         }
         if (other.tag == "laser")
         {
@@ -128,14 +210,22 @@ public class Enemy : MonoBehaviour
             _speed = 0;
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
-            _isenemyAlive = false;
+            _IsenemyAlive = false;
             _SelfDestroy = false;
             Destroy(this.gameObject, 2.9f);
         }
-    }
-    public void EndOfEnemy()
-    {
-        Destroy(this.gameObject);
+        if (other.tag == "Missile")
+        {
+            Destroy(other.gameObject);
+            _animation.SetTrigger("WhenEnemyDies");
+            _speed = 0;
+            _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
+            _IsenemyAlive = false;
+            _SelfDestroy = false;
+            Destroy(this.gameObject, 2.9f);
+        }
+
     }
 }
 

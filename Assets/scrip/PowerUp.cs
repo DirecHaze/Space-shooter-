@@ -9,7 +9,19 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int _powerUpID;
 
-  
+    private float _qickmove = 5.5f;
+
+    private Player _player;
+    void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        GameObject[] players;
+        players = GameObject.FindGameObjectsWithTag("Player");
+        if (players == null)
+        {
+            Debug.LogError("The Player is null");
+        }
+    }
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -17,7 +29,20 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        test();
     }
+    public void MoveToPlayer()
+    {
+        transform.position = Vector3.Lerp(transform.position, _player.transform.position, _qickmove * Time.deltaTime);
+    }
+    public void test()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            MoveToPlayer();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
@@ -36,6 +61,18 @@ public class PowerUp : MonoBehaviour
                     break;
                 case 3:
                     player.TheBlastOn();
+                    break;
+                case 4:
+                    player.AmmoPickUp();
+                    break;
+                case 5:
+                    player.LifeUP();
+                    break;
+                case 6:
+                    player.MissileOn();
+                    break;
+                case 7:
+                    player.SpeedDownOn();
                     break;
 
             }
